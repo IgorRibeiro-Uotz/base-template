@@ -1,32 +1,43 @@
 <template>
-  <div id="app">
+  <component :is="resolveLayoutVariant">
+    <router-view></router-view>
+  </component>
+  <!-- <div id="app">
     <div id="nav">
       <router-link to="/home">home</router-link> |
       <router-link to="/">dash</router-link> |
+      <AcsTextButton />
     </div>
     <router-view />
-  </div>
+  </div> -->
 </template>
+<script>
+export default {
+  data() {
+    return {};
+  },
+  components: {
+    LayoutBlank: () => import("@/@core/layouts/LayoutBlank"),
+    LayoutContentVerticalNav: () =>
+      import("@/@core/layouts/LayoutContentVerticalNav"),
+  },
+  computed: {
+    resolveLayoutVariant() {
+      let layoutComponent;
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+      switch (this.$route.meta.layout) {
+        case "blank":
+          layoutComponent = "layout-blank";
+          break;
 
-#nav {
-  padding: 30px;
+        default:
+          layoutComponent = "layout-content-vertical-nav";
+          break;
+      }
+      return layoutComponent;
+    },
+  },
+};
+</script>
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+<style lang="scss"></style>
